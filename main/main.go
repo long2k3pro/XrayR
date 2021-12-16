@@ -24,7 +24,7 @@ var (
 var (
 	version  = "0.7.2"
 	codename = "XrayR"
-	intro    = "Test A Xray backend that supports many panels"
+	intro    = "123Test A Xray backend that supports many panels"
 )
 
 func showVersion() {
