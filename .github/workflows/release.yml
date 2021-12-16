@@ -30,12 +30,12 @@ jobs:
         goarch: [amd64, 386]
         exclude:
           # Exclude i386 on darwin and dragonfly.
-          # - goarch: 386
-          #   goos: dragonfly
-          # - goarch: 386
-          #   goos: darwin
-          # - goarch: 386
-          #   goos: openbsd
+          - goarch: 386
+            goos: dragonfly
+          - goarch: 386
+            goos: darwin
+          - goarch: 386
+            goos: openbsd
         include:
           # BEIGIN MacOS ARM64
           # - goos: darwin
