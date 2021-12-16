@@ -1,12 +1,15 @@
-# Binaries for programs and plugins
-*.exe
-*.exe~
-*.dll
-*.so
-*.dylib
-
-# Test binary, build with `go test -c`
-*.test
-
-# Output of the go coverage tool, specifically when used with LiteIDE
-*.out
+main/main
+main/XrayR
+main/XrayR*
+main/mytest
+main/access.logo
+main/error.log
+api/chooseparser.go.bak
+common/Inboundbuilder/.lego/
+common/legocmd/.lego/
+.vscode/launch.json
+main/.lego
+main/cert
+main/config.yml
+./vscode
+.idea/*
