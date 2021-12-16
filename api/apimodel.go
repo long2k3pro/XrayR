@@ -29,7 +29,6 @@ type NodeInfo struct {
 	NodeID            int
 	Port              int
 	SpeedLimit        uint64 // Bps
-	DeviceLimit       int
 	AlterID           int
 	TransportProtocol string
 	FakeType          string
