@@ -20,8 +20,8 @@ require (
 	github.com/stretchr/testify v1.7.0
 	github.com/tklauser/go-sysconf v0.3.4 // indirect
 	github.com/urfave/cli v1.22.5
-	github.com/xtls/xray-core v1.4.5
-	golang.org/x/net v0.0.0-20210917221730-978cfadd31cf
+	github.com/xtls/xray-core v1.5.1
+	golang.org/x/net v0.0.0-20211209124913-491a49abca63
 	google.golang.org/appengine v1.6.7 // indirect
 	google.golang.org/protobuf v1.27.1
 )
@@ -51,7 +51,7 @@ require (
 	github.com/davecgh/go-spew v1.1.1 // indirect
 	github.com/deepmap/oapi-codegen v1.3.11 // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible // indirect
-	github.com/dgryski/go-metro v0.0.0-20200812162917-85c65e2d0165 // indirect
+	github.com/dgryski/go-metro v0.0.0-20211015221634-2661b20a2446 // indirect
 	github.com/dimchansky/utfbom v1.1.0 // indirect
 	github.com/dnsimple/dnsimple-go v0.63.0 // indirect
 	github.com/exoscale/egoscale v0.46.0 // indirect
@@ -85,7 +85,7 @@ require (
 	github.com/liquidweb/go-lwApi v0.0.5 // indirect
 	github.com/liquidweb/liquidweb-cli v0.6.9 // indirect
 	github.com/liquidweb/liquidweb-go v1.6.3 // indirect
-	github.com/lucas-clemente/quic-go v0.23.0 // indirect
+	github.com/lucas-clemente/quic-go v0.24.0 // indirect
 	github.com/magiconair/properties v1.8.4 // indirect
 	github.com/marten-seemann/qtls-go1-16 v0.1.4 // indirect
 	github.com/marten-seemann/qtls-go1-17 v0.1.0 // indirect
@@ -103,7 +103,7 @@ require (
 	github.com/nrdcg/namesilo v0.2.1 // indirect
 	github.com/nrdcg/porkbun v0.1.1 // indirect
 	github.com/nxadm/tail v1.4.8 // indirect
-	github.com/onsi/ginkgo v1.16.4 // indirect
+	github.com/onsi/ginkgo v1.16.5 // indirect
 	github.com/oracle/oci-go-sdk v24.3.0+incompatible // indirect
 	github.com/ovh/go-ovh v1.1.0 // indirect
 	github.com/patrickmn/go-cache v2.1.0+incompatible // indirect
@@ -113,7 +113,8 @@ require (
 	github.com/pmezard/go-difflib v1.0.0 // indirect
 	github.com/pquerna/otp v1.3.0 // indirect
 	github.com/rainycape/memcache v0.0.0-20150622160815-1031fa0ce2f2 // indirect
-	github.com/refraction-networking/utls v0.0.0-20210713165636-0b2885c8c0d4 // indirect
+	github.com/refraction-networking/utls v1.0.0 // indirect
+	github.com/riobard/go-bloom v0.0.0-20200614022211-cdc8013cb5b3 // indirect
 	github.com/russross/blackfriday/v2 v2.0.1 // indirect
 	github.com/sacloud/libsacloud v1.36.2 // indirect
 	github.com/scaleway/scaleway-sdk-go v1.0.0-beta.7.0.20210127161313-bd30bebeac4f // indirect
@@ -129,24 +130,25 @@ require (
 	github.com/subosito/gotenv v1.2.0 // indirect
 	github.com/tklauser/numcpus v0.2.1 // indirect
 	github.com/transip/gotransip/v6 v6.6.0 // indirect
+	github.com/v2fly/ss-bloomring v0.0.0-20210312155135-28617310f63e // indirect
 	github.com/vinyldns/go-vinyldns v0.0.0-20200917153823-148a5f6b8f14 // indirect
 	github.com/vmihailenco/msgpack v4.0.4+incompatible // indirect
 	github.com/vultr/govultr/v2 v2.4.0 // indirect
 	github.com/xtls/go v0.0.0-20210920065950-d4af136d3672 // indirect
 	go.opencensus.io v0.22.3 // indirect
-	go.starlark.net v0.0.0-20210901212718-87f333178d59 // indirect
+	go.starlark.net v0.0.0-20211203141949-70c0e40ae128 // indirect
 	go.uber.org/ratelimit v0.0.0-20180316092928-c15da0234277 // indirect
-	golang.org/x/crypto v0.0.0-20210920023735-84f357641f63 // indirect
-	golang.org/x/mod v0.5.0 // indirect
+	golang.org/x/crypto v0.0.0-20211209193657-4570a0811e8b // indirect
+	golang.org/x/mod v0.5.1 // indirect
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d // indirect
-	golang.org/x/sys v0.0.0-20210917161153-d61c044b1678 // indirect
+	golang.org/x/sys v0.0.0-20211214234402-4825e8c3871d // indirect
 	golang.org/x/text v0.3.7 // indirect
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba // indirect
-	golang.org/x/tools v0.1.6 // indirect
+	golang.org/x/tools v0.1.8 // indirect
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 // indirect
 	google.golang.org/api v0.20.0 // indirect
-	google.golang.org/genproto v0.0.0-20210917145530-b395a37504d4 // indirect
-	google.golang.org/grpc v1.40.0 // indirect
+	google.golang.org/genproto v0.0.0-20211208223120-3a66f561d7aa // indirect
+	google.golang.org/grpc v1.43.0 // indirect
 	gopkg.in/ini.v1 v1.62.0 // indirect
 	gopkg.in/ns1/ns1-go.v2 v2.4.4 // indirect
 	gopkg.in/square/go-jose.v2 v2.5.1 // indirect

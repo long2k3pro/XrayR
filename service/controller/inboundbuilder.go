@@ -26,8 +26,10 @@ func InboundBuilder(config *Config, nodeInfo *api.NodeInfo) (*core.InboundHandle
 	}
 
 	// Build Port
-	portRange := &conf.PortRange{From: uint32(nodeInfo.Port), To: uint32(nodeInfo.Port)}
-	inboundDetourConfig.PortRange = portRange
+	portList := &conf.PortList{
+		Range: []conf.PortRange{{From: uint32(nodeInfo.Port), To: uint32(nodeInfo.Port)}},
+	}
+	inboundDetourConfig.PortList = portList
 	// Build Tag
 	inboundDetourConfig.Tag = fmt.Sprintf("%s_%d", nodeInfo.NodeType, nodeInfo.Port)
 	// SniffingConfig
@@ -94,6 +96,11 @@ func InboundBuilder(config *Config, nodeInfo *api.NodeInfo) (*core.InboundHandle
 		proxySetting, _ := proxySetting.(*conf.ShadowsocksServerConfig)
 		proxySetting.Users = append(proxySetting.Users, defaultSSuser)
 		proxySetting.NetworkList = &conf.NetworkList{"tcp", "udp"}
+		proxySetting.IVCheck = true
+		if config.DisableIVCheck {
+			proxySetting.IVCheck = false
+		}
+
 	} else if nodeInfo.NodeType == "dokodemo-door" {
 		protocol = "dokodemo-door"
 		proxySetting = struct {

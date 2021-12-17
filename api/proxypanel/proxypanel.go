@@ -412,7 +412,6 @@ func (c *APIClient) ReportIllegal(detectResultList *[]api.DetectResult) error {
 func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*api.NodeInfo, error) {
 	var TLStype string
 	var speedlimit uint64 = 0
-	//var devicelimit int = 0
 	if c.EnableXTLS {
 		TLStype = "xtls"
 	} else {
@@ -429,18 +428,13 @@ func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*
 	} else {
 		speedlimit = uint64((v2rayNodeInfo.SpeedLimit * 1000000) / 8)
 	}
-	// if c.DeviceLimit > 0 {
-	// 	devicelimit := int((c.DeviceLimit))
-	// } else {
-	// 	devicelimit
-	// }
+
 	// Create GeneralNodeInfo
 	nodeinfo := &api.NodeInfo{
 		NodeType:          c.NodeType,
 		NodeID:            c.NodeID,
 		Port:              v2rayNodeInfo.V2Port,
 		SpeedLimit:        speedlimit,
-		DeviceLimit:       v2rayNodeInfo.ClientLimit,
 		AlterID:           v2rayNodeInfo.V2AlterID,
 		TransportProtocol: v2rayNodeInfo.V2Net,
 		FakeType:          v2rayNodeInfo.V2Type,
@@ -541,10 +535,11 @@ func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage
 			speedlimit = uint64((user.SpeedLimit * 1000000) / 8)
 		}
 		userList[i] = api.UserInfo{
-			UID:        user.UID,
-			Email:      "",
-			UUID:       user.VmessUID,
-			SpeedLimit: speedlimit,
+			UID:         user.UID,
+			Email:       "",
+			UUID:        user.VmessUID,
+			DeviceLimit: c.DeviceLimit,
+			SpeedLimit:  speedlimit,
 		}
 	}
 
@@ -568,10 +563,11 @@ func (c *APIClient) ParseTrojanUserListResponse(userInfoResponse *json.RawMessag
 			speedlimit = uint64((user.SpeedLimit * 1000000) / 8)
 		}
 		userList[i] = api.UserInfo{
-			UID:        user.UID,
-			Email:      "",
-			UUID:       user.Password,
-			SpeedLimit: speedlimit,
+			UID:         user.UID,
+			Email:       "",
+			UUID:        user.Password,
+			DeviceLimit: c.DeviceLimit,
+			SpeedLimit:  speedlimit,
 		}
 	}
 
