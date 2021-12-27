@@ -4,16 +4,16 @@ import "encoding/json"
 
 // NodeInfoResponse is the response of node
 type NodeInfoResponse struct {
-	Group           int           `json:"node_group"`
-	Class           int           `json:"node_class"`
-	SpeedLimit      float64       `json:"node_speedlimit"`
-	TrafficRate     float64       `json:"traffic_rate"`
-	MuOnly          int           `json:"mu_only"`
-	Sort            int           `json:"sort"`
-	RawServerString string        `json:"server"`
-	Type            string        `json:"type"`
-	CustomConfig    *CustomConfig `json:"custom_config"`
-	Version         string        `json:"version"`
+	Group           int             `json:"node_group"`
+	Class           int             `json:"node_class"`
+	SpeedLimit      float64         `json:"node_speedlimit"`
+	TrafficRate     float64         `json:"traffic_rate"`
+	MuOnly          int             `json:"mu_only"`
+	Sort            int             `json:"sort"`
+	RawServerString string          `json:"server"`
+	Type            string          `json:"type"`
+	CustomConfig    json.RawMessage `json:"custom_config"`
+	Version         string          `json:"version"`
 }
 
 type CustomConfig struct {

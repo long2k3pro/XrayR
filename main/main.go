@@ -10,6 +10,7 @@ import (
 	"runtime"
 	"strings"
 	"syscall"
+	"time"
 
 	"github.com/XrayR-project/XrayR/panel"
 	"github.com/fsnotify/fsnotify"
@@ -22,7 +23,7 @@ var (
 )
 
 var (
-	version  = "0.7.3"
+	version  = "0.7.4"
 	codename = "XrayR"
 	intro    = "A Xray backend that supports many panels"
 )
@@ -74,13 +75,19 @@ func main() {
 	panelConfig := &panel.Config{}
 	config.Unmarshal(panelConfig)
 	p := panel.New(panelConfig)
+	lastTime := time.Now()
 	config.OnConfigChange(func(e fsnotify.Event) {
-		// Hot reload function
-		fmt.Println("Config file changed:", e.Name)
-		p.Close()
-		config.Unmarshal(panelConfig)
-		p = panel.New(panelConfig)
-		p.Start()
+		// Discarding event received within a short period of time after receiving an event.
+		if time.Now().After(lastTime.Add(3 * time.Second)) {
+			// Hot reload function
+			fmt.Println("Config file changed:", e.Name)
+			p.Close()
+			// Delete old instance and trigger GC
+			runtime.GC()
+			config.Unmarshal(panelConfig)
+			p.Start()
+			lastTime = time.Now()
+		}
 	})
 	p.Start()
 	defer p.Close()

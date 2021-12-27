@@ -146,8 +146,8 @@ func (c *APIClient) GetNodeInfo() (nodeInfo *api.NodeInfo, err error) {
 		path = fmt.Sprintf("/api/v2ray/v1/node/%d", c.NodeID)
 	case "Trojan":
 		path = fmt.Sprintf("/api/trojan/v1/node/%d", c.NodeID)
-	// case "Shadowsocks":
-	// 	path = fmt.Sprintf("/api/vnet/v2/node/%d", c.NodeID)
+	case "Shadowsocks":
+		path = fmt.Sprintf("/api/ss/v1/node/%d", c.NodeID)
 	default:
 		return nil, fmt.Errorf("Unsupported Node type: %s", c.NodeType)
 	}
@@ -167,15 +167,15 @@ func (c *APIClient) GetNodeInfo() (nodeInfo *api.NodeInfo, err error) {
 		nodeInfo, err = c.ParseV2rayNodeResponse(&response.Data)
 	case "Trojan":
 		nodeInfo, err = c.ParseTrojanNodeResponse(&response.Data)
-	// case "Shadowsocks":
-	// 	nodeInfo, err = c.ParseSSNodeResponse(&response.Data)
+	case "Shadowsocks":
+		nodeInfo, err = c.ParseSSNodeResponse(&response.Data)
 	default:
 		return nil, fmt.Errorf("Unsupported Node type: %s", c.NodeType)
 	}
 
 	if err != nil {
 		res, _ := json.Marshal(response.Data)
-		return nil, fmt.Errorf("Parse node info failed: %s", string(res))
+		return nil, fmt.Errorf("Parse node info failed: %s, \nError: %s", string(res), err)
 	}
 
 	return nodeInfo, nil
@@ -189,8 +189,8 @@ func (c *APIClient) GetUserList() (UserList *[]api.UserInfo, err error) {
 		path = fmt.Sprintf("/api/v2ray/v1/userList/%d", c.NodeID)
 	case "Trojan":
 		path = fmt.Sprintf("/api/trojan/v1/userList/%d", c.NodeID)
-	// case "Shadowsocks":
-	// 	path = fmt.Sprintf("/api/vnet/v2/userList/%d", c.NodeID)
+	case "Shadowsocks":
+		path = fmt.Sprintf("/api/ss/v1/userList/%d", c.NodeID)
 	default:
 		return nil, fmt.Errorf("Unsupported Node type: %s", c.NodeType)
 	}
@@ -210,8 +210,8 @@ func (c *APIClient) GetUserList() (UserList *[]api.UserInfo, err error) {
 		userList, err = c.ParseV2rayUserListResponse(&response.Data)
 	case "Trojan":
 		userList, err = c.ParseTrojanUserListResponse(&response.Data)
-	// case "Shadowsocks":
-	// 	userList, err = c.ParseSSUserListResponse(&response.Data)
+	case "Shadowsocks":
+		userList, err = c.ParseSSUserListResponse(&response.Data)
 	default:
 		return nil, fmt.Errorf("Unsupported Node type: %s", c.NodeType)
 	}
@@ -230,8 +230,8 @@ func (c *APIClient) ReportNodeStatus(nodeStatus *api.NodeStatus) (err error) {
 		path = fmt.Sprintf("/api/v2ray/v1/nodeStatus/%d", c.NodeID)
 	case "Trojan":
 		path = fmt.Sprintf("/api/trojan/v1/nodeStatus/%d", c.NodeID)
-	// case "Shadowsocks":
-	// 	path = fmt.Sprintf("/api/vnet/v1/nodeStatus/%d", c.NodeID)
+	case "Shadowsocks":
+		path = fmt.Sprintf("/api/ss/v1/nodeStatus/%d", c.NodeID)
 	default:
 		return fmt.Errorf("Unsupported Node type: %s", c.NodeType)
 	}
@@ -266,8 +266,8 @@ func (c *APIClient) ReportNodeOnlineUsers(onlineUserList *[]api.OnlineUser) erro
 		path = fmt.Sprintf("/api/v2ray/v1/nodeOnline/%d", c.NodeID)
 	case "Trojan":
 		path = fmt.Sprintf("/api/trojan/v1/nodeOnline/%d", c.NodeID)
-	// case "Shadowsocks":
-	// 	path = fmt.Sprintf("/api/vnet/v1/nodeOnline/%d", c.NodeID)
+	case "Shadowsocks":
+		path = fmt.Sprintf("/api/ss/v1/nodeOnline/%d", c.NodeID)
 	default:
 		return fmt.Errorf("Unsupported Node type: %s", c.NodeType)
 	}
@@ -299,8 +299,8 @@ func (c *APIClient) ReportUserTraffic(userTraffic *[]api.UserTraffic) error {
 		path = fmt.Sprintf("/api/v2ray/v1/userTraffic/%d", c.NodeID)
 	case "Trojan":
 		path = fmt.Sprintf("/api/trojan/v1/userTraffic/%d", c.NodeID)
-	// case "Shadowsocks":
-	// 	path = fmt.Sprintf("/api/vnet/v1/userTraffic/%d", c.NodeID)
+	case "Shadowsocks":
+		path = fmt.Sprintf("/api/ss/v1/userTraffic/%d", c.NodeID)
 	default:
 		return fmt.Errorf("Unsupported Node type: %s", c.NodeType)
 	}
@@ -334,8 +334,8 @@ func (c *APIClient) GetNodeRule() (*[]api.DetectRule, error) {
 		path = fmt.Sprintf("/api/v2ray/v1/nodeRule/%d", c.NodeID)
 	case "Trojan":
 		path = fmt.Sprintf("/api/trojan/v1/nodeRule/%d", c.NodeID)
-	// case "Shadowsocks":
-	// 	path = fmt.Sprintf("/api/vnet/v1/nodeRule/%d", c.NodeID)
+	case "Shadowsocks":
+		path = fmt.Sprintf("/api/ss/v1/nodeRule/%d", c.NodeID)
 	default:
 		return nil, fmt.Errorf("Unsupported Node type: %s", c.NodeType)
 	}
@@ -382,8 +382,8 @@ func (c *APIClient) ReportIllegal(detectResultList *[]api.DetectResult) error {
 		path = fmt.Sprintf("/api/v2ray/v1/trigger/%d", c.NodeID)
 	case "Trojan":
 		path = fmt.Sprintf("/api/trojan/v1/trigger/%d", c.NodeID)
-	// case "Shadowsocks":
-	// 	path = fmt.Sprintf("/api/vnet/v1/trigger/%d", c.NodeID)
+	case "Shadowsocks":
+		path = fmt.Sprintf("/api/ss/v1/trigger/%d", c.NodeID)
 	default:
 		return fmt.Errorf("Unsupported Node type: %s", c.NodeType)
 	}
@@ -429,6 +429,10 @@ func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*
 		speedlimit = uint64((v2rayNodeInfo.SpeedLimit * 1000000) / 8)
 	}
 
+	if c.DeviceLimit == 0 && v2rayNodeInfo.ClientLimit > 0 {
+		c.DeviceLimit = v2rayNodeInfo.ClientLimit
+	}
+
 	// Create GeneralNodeInfo
 	nodeinfo := &api.NodeInfo{
 		NodeType:          c.NodeType,
@@ -451,7 +455,6 @@ func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*
 // ParseSSNodeResponse parse the response for the given nodeinfor format
 func (c *APIClient) ParseSSNodeResponse(nodeInfoResponse *json.RawMessage) (*api.NodeInfo, error) {
 	var speedlimit uint64 = 0
-	var port int
 	shadowsocksNodeInfo := new(ShadowsocksNodeInfo)
 	if err := json.Unmarshal(*nodeInfoResponse, shadowsocksNodeInfo); err != nil {
 		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(*nodeInfoResponse), err)
@@ -461,21 +464,15 @@ func (c *APIClient) ParseSSNodeResponse(nodeInfoResponse *json.RawMessage) (*api
 	} else {
 		speedlimit = uint64((shadowsocksNodeInfo.SpeedLimit * 1000000) / 8)
 	}
-	if shadowsocksNodeInfo.Single == 0 {
-		return nil, fmt.Errorf("Only support single port")
-	}
-	if shadowsocksNodeInfo.Port == "" {
-		return nil, fmt.Errorf("Port cannot be none")
-	}
-	port, err := strconv.Atoi(shadowsocksNodeInfo.Port)
-	if err != nil {
-		return nil, err
+
+	if c.DeviceLimit == 0 && shadowsocksNodeInfo.ClientLimit > 0 {
+		c.DeviceLimit = shadowsocksNodeInfo.ClientLimit
 	}
 	// Create GeneralNodeInfo
 	nodeinfo := &api.NodeInfo{
 		NodeType:          c.NodeType,
 		NodeID:            c.NodeID,
-		Port:              port,
+		Port:              shadowsocksNodeInfo.Port,
 		SpeedLimit:        speedlimit,
 		TransportProtocol: "tcp",
 		CypherMethod:      shadowsocksNodeInfo.Method,
@@ -504,6 +501,11 @@ func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (
 	} else {
 		speedlimit = uint64((trojanNodeInfo.SpeedLimit * 1000000) / 8)
 	}
+
+	if c.DeviceLimit == 0 && trojanNodeInfo.ClientLimit > 0 {
+		c.DeviceLimit = trojanNodeInfo.ClientLimit
+	}
+
 	// Create GeneralNodeInfo
 	nodeinfo := &api.NodeInfo{
 		NodeType:          c.NodeType,
@@ -591,10 +593,11 @@ func (c *APIClient) ParseSSUserListResponse(userInfoResponse *json.RawMessage) (
 			speedlimit = uint64((user.SpeedLimit * 1000000) / 8)
 		}
 		userList[i] = api.UserInfo{
-			UID:        user.UID,
-			Email:      "",
-			Passwd:     user.Password,
-			SpeedLimit: speedlimit,
+			UID:         user.UID,
+			Email:       "",
+			Passwd:      user.Password,
+			DeviceLimit: c.DeviceLimit,
+			SpeedLimit:  speedlimit,
 		}
 	}
 
