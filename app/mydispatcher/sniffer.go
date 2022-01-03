@@ -4,9 +4,9 @@ import (
 	"context"
 
 	"github.com/xtls/xray-core/common"
+	"github.com/xtls/xray-core/common/protocol/bittorrent"
 	"github.com/xtls/xray-core/common/protocol/http"
-	//"github.com/xtls/xray-core/common/protocol/http"
-	//"github.com/xtls/xray-core/common/protocol/tls"
+	"github.com/xtls/xray-core/common/protocol/tls"
 )
 
 type SniffResult interface {
@@ -32,8 +32,8 @@ func NewSniffer(ctx context.Context) *Sniffer {
 	ret := &Sniffer{
 		sniffer: []protocolSnifferWithMetadata{
 			{func(c context.Context, b []byte) (SniffResult, error) { return http.SniffHTTP(b) }, false},
-			//{func(c context.Context, b []byte) (SniffResult, error) { return tls.SniffTLS(b) }, false},
-			//{func(c context.Context, b []byte) (SniffResult, error) { return bittorrent.SniffBittorrent(b) }, false},
+			{func(c context.Context, b []byte) (SniffResult, error) { return tls.SniffTLS(b) }, false},
+			{func(c context.Context, b []byte) (SniffResult, error) { return bittorrent.SniffBittorrent(b) }, false},
 		},
 	}
 	if sniffer, err := newFakeDNSSniffer(ctx); err == nil {
