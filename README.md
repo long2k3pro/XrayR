@@ -47,7 +47,7 @@ A Xray backend framework that can easily support many panels.
 | sspanel-uim                                            | √     | √      | √ (单端口多用户和V2ray-Plugin) |
 | v2board                                                | √     | √      | √                              |
 | [PMPanel](https://github.com/ByteInternetHK/PMPanel)   | √     | √      | √                              |
-| [ProxyPanel](https://github.com/ProxyPanel/ProxyPanel) | √     | √      | ×                              |
+| [ProxyPanel](https://github.com/ProxyPanel/ProxyPanel) | √     | √      | √                              |
 
 ## 软件安装
 ### 一键安装

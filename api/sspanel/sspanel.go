@@ -28,18 +28,19 @@ var (
 
 // APIClient create a api client to the panel.
 type APIClient struct {
-	client           *resty.Client
-	APIHost          string
-	NodeID           int
-	Key              string
-	NodeType         string
-	EnableVless      bool
-	EnableXTLS       bool
-	SpeedLimit       float64
-	DeviceLimit      int
-	LocalRuleList    []api.DetectRule
-	LastReportOnline map[int]int
-	access           sync.Mutex
+	client              *resty.Client
+	APIHost             string
+	NodeID              int
+	Key                 string
+	NodeType            string
+	EnableVless         bool
+	EnableXTLS          bool
+	SpeedLimit          float64
+	DeviceLimit         int
+	DisableCustomConfig bool
+	LocalRuleList       []api.DetectRule
+	LastReportOnline    map[int]int
+	access              sync.Mutex
 }
 
 // New creat a api instance
@@ -68,17 +69,18 @@ func New(apiConfig *api.Config) *APIClient {
 	localRuleList := readLocalRuleList(apiConfig.RuleListPath)
 
 	return &APIClient{
-		client:           client,
-		NodeID:           apiConfig.NodeID,
-		Key:              apiConfig.Key,
-		APIHost:          apiConfig.APIHost,
-		NodeType:         apiConfig.NodeType,
-		EnableVless:      apiConfig.EnableVless,
-		EnableXTLS:       apiConfig.EnableXTLS,
-		SpeedLimit:       apiConfig.SpeedLimit,
-		DeviceLimit:      apiConfig.DeviceLimit,
-		LocalRuleList:    localRuleList,
-		LastReportOnline: make(map[int]int),
+		client:              client,
+		NodeID:              apiConfig.NodeID,
+		Key:                 apiConfig.Key,
+		APIHost:             apiConfig.APIHost,
+		NodeType:            apiConfig.NodeType,
+		EnableVless:         apiConfig.EnableVless,
+		EnableXTLS:          apiConfig.EnableXTLS,
+		SpeedLimit:          apiConfig.SpeedLimit,
+		DeviceLimit:         apiConfig.DeviceLimit,
+		LocalRuleList:       localRuleList,
+		DisableCustomConfig: apiConfig.DisableCustomConfig,
+		LastReportOnline:    make(map[int]int),
 	}
 }
 
@@ -169,8 +171,12 @@ func (c *APIClient) GetNodeInfo() (nodeInfo *api.NodeInfo, err error) {
 	}
 
 	// New sspanel API
-	if nodeInfoResponse.Version == "2021.11" {
+	if nodeInfoResponse.Version == "2021.11" && !c.DisableCustomConfig {
 		nodeInfo, err = c.ParseSSPanelNodeInfo(nodeInfoResponse)
+		if err != nil {
+			res, _ := json.Marshal(nodeInfoResponse)
+			return nil, fmt.Errorf("Parse node info failed: %s, \nError: %s, \nPlease check the doc of custom_config for help: https://crackair.gitbook.io/xrayr-project/dui-jie-sspanel/sspanel/sspanel_custom_config", string(res), err)
+		}
 	} else {
 		switch c.NodeType {
 		case "V2ray":
