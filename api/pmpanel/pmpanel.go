@@ -55,7 +55,7 @@ func New(apiConfig *api.Config) *APIClient {
 			log.Print(v.Err)
 		}
 	})
-	client.SetHostURL(apiConfig.APIHost)
+	client.SetBaseURL(apiConfig.APIHost)
 	// Create Key for each requests
 	client.SetHeaders(map[string]string{
 		"key": apiConfig.Key,

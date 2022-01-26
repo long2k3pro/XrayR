@@ -60,7 +60,7 @@ func New(apiConfig *api.Config) *APIClient {
 			log.Print(v.Err)
 		}
 	})
-	client.SetHostURL(apiConfig.APIHost)
+	client.SetBaseURL(apiConfig.APIHost)
 	// Create Key for each requests
 	client.SetQueryParam("key", apiConfig.Key)
 	// Add support for muKey
@@ -171,7 +171,15 @@ func (c *APIClient) GetNodeInfo() (nodeInfo *api.NodeInfo, err error) {
 	}
 
 	// New sspanel API
-	if nodeInfoResponse.Version == "2021.11" && !c.DisableCustomConfig {
+	disableCustomConfig := c.DisableCustomConfig
+	if nodeInfoResponse.Version == "2021.11" && !disableCustomConfig {
+		// Check if custom_config is empty
+		if configString, err := json.Marshal(nodeInfoResponse.CustomConfig); err != nil || string(configString) == "[]" {
+			log.Printf("custom_config is empty! take config from address now.")
+			disableCustomConfig = true
+		}
+	}
+	if !disableCustomConfig {
 		nodeInfo, err = c.ParseSSPanelNodeInfo(nodeInfoResponse)
 		if err != nil {
 			res, _ := json.Marshal(nodeInfoResponse)
@@ -724,9 +732,6 @@ func (c *APIClient) ParseSSPanelNodeInfo(nodeInfoResponse *NodeInfoResponse) (*a
 
 	nodeConfig := new(CustomConfig)
 	json.Unmarshal(nodeInfoResponse.CustomConfig, nodeConfig)
-	if nodeConfig == nil {
-		return nil, fmt.Errorf("No custom config found")
-	}
 
 	if c.SpeedLimit > 0 {
 		speedlimit = uint64((c.SpeedLimit * 1000000) / 8)

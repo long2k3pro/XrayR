@@ -45,7 +45,7 @@ func New(apiConfig *api.Config) *APIClient {
 			log.Print(v.Err)
 		}
 	})
-	client.SetHostURL(apiConfig.APIHost)
+	client.SetBaseURL(apiConfig.APIHost)
 	// Read local rule list
 	localRuleList := readLocalRuleList(apiConfig.RuleListPath)
 	apiClient := &APIClient{

@@ -47,7 +47,6 @@ func New(apiConfig *api.Config) *APIClient {
 	})
 	client.SetHostURL(apiConfig.APIHost)
 	// Create Key for each requests
-	client.SetQueryParam("key", apiConfig.Key)
 	client.SetQueryParams(map[string]string{
 		"node_id":    strconv.Itoa(apiConfig.NodeID),
 		"token":      apiConfig.Key,
