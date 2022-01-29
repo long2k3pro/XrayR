@@ -2,7 +2,7 @@ Log:
   Level: none # Log level: none, error, warning, info, debug 
   AccessPath: # /etc/XrayR/access.Log
   ErrorPath: # /etc/XrayR/error.log
-DnsConfigPath:  /etc/XrayR/dns.json Path to dns config, check https://xtls.github.io/config/base/dns/ for help
+DnsConfigPath:  /etc/XrayR/dns.json # Path to dns config, check https://xtls.github.io/config/base/dns/ for help
 RouteConfigPath:  /etc/XrayR/route.json # Path to route config, check https://xtls.github.io/config/base/route/ for help
 OutboundConfigPath:  /etc/XrayR/custom_outbound.json # Path to custom outbound config, check https://xtls.github.io/config/base/outbound/ for help
 ConnetionConfig:
