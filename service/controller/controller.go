@@ -1,7 +1,6 @@
 package controller
 
 import (
-	"encoding/base64"
 	"fmt"
 	"log"
 	"reflect"
@@ -46,7 +45,7 @@ func (c *Controller) Start() error {
 		return err
 	}
 	c.nodeInfo = newNodeInfo
-	c.Tag = fmt.Sprintf("%s_%s_%d", c.nodeInfo.NodeType, base64.StdEncoding.EncodeToString([]byte(c.config.ListenIP)), c.nodeInfo.Port)
+	c.Tag = c.buildNodeTag()
 	// Add new tag
 	err = c.addNewTag(newNodeInfo)
 	if err != nil {
@@ -86,9 +85,9 @@ func (c *Controller) Start() error {
 		Interval: time.Duration(c.config.UpdatePeriodic) * time.Second,
 		Execute:  c.userInfoMonitor,
 	}
-	log.Printf("[NodeID: %d] Start monitor node status", c.nodeInfo.NodeID)
+	log.Printf("[%s: %d] Start monitor node status", c.nodeInfo.NodeType, c.nodeInfo.NodeID)
 	_ = c.nodeInfoMonitorPeriodic.Start()
-	log.Printf("[NodeID: %d] Start report node status", c.nodeInfo.NodeID)
+	log.Printf("[%s: %d] Start report node status", c.nodeInfo.NodeType, c.nodeInfo.NodeID)
 	_ = c.userReportPeriodic.Start()
 	return nil
 }
@@ -145,7 +144,7 @@ func (c *Controller) nodeInfoMonitor() (err error) {
 		}
 		// Add new tag
 		c.nodeInfo = newNodeInfo
-		c.Tag = fmt.Sprintf("%s_%s_%d", newNodeInfo.NodeType, base64.StdEncoding.EncodeToString([]byte(c.config.ListenIP)), newNodeInfo.Port)
+		c.Tag = c.buildNodeTag()
 		err = c.addNewTag(newNodeInfo)
 		if err != nil {
 			log.Print(err)
@@ -216,7 +215,7 @@ func (c *Controller) nodeInfoMonitor() (err error) {
 				log.Print(err)
 			}
 		}
-		log.Printf("[NodeID: %d] %d user deleted, %d user added", c.nodeInfo.NodeID, len(deleted), len(added))
+		log.Printf("[%s: %d] %d user deleted, %d user added", c.nodeInfo.NodeType, c.nodeInfo.NodeID, len(deleted), len(added))
 	}
 	c.userList = newUserInfo
 	return nil
@@ -318,16 +317,16 @@ func (c *Controller) addNewUser(userInfo *[]api.UserInfo, nodeInfo *api.NodeInfo
 	users := make([]*protocol.User, 0)
 	if nodeInfo.NodeType == "V2ray" {
 		if nodeInfo.EnableVless {
-			users = buildVlessUser(c.Tag, userInfo)
+			users = c.buildVlessUser(userInfo)
 		} else {
-			users = buildVmessUser(c.Tag, userInfo, nodeInfo.AlterID)
+			users = c.buildVmessUser(userInfo, nodeInfo.AlterID)
 		}
 	} else if nodeInfo.NodeType == "Trojan" {
-		users = buildTrojanUser(c.Tag, userInfo)
+		users = c.buildTrojanUser(userInfo)
 	} else if nodeInfo.NodeType == "Shadowsocks" {
-		users = buildSSUser(c.Tag, userInfo, nodeInfo.CypherMethod)
+		users = c.buildSSUser(userInfo, nodeInfo.CypherMethod)
 	} else if nodeInfo.NodeType == "Shadowsocks-Plugin" {
-		users = buildSSPluginUser(c.Tag, userInfo)
+		users = c.buildSSPluginUser(userInfo)
 	} else {
 		return fmt.Errorf("unsupported node type: %s", nodeInfo.NodeType)
 	}
@@ -335,7 +334,7 @@ func (c *Controller) addNewUser(userInfo *[]api.UserInfo, nodeInfo *api.NodeInfo
 	if err != nil {
 		return err
 	}
-	log.Printf("[NodeID: %d] Added %d new users", c.nodeInfo.NodeID, len(*userInfo))
+	log.Printf("[%s: %d] Added %d new users", c.nodeInfo.NodeType, c.nodeInfo.NodeID, len(*userInfo))
 	return nil
 }
 
@@ -420,7 +419,7 @@ func (c *Controller) userInfoMonitor() (err error) {
 		if err = c.apiClient.ReportNodeOnlineUsers(onlineDevice); err != nil {
 			log.Print(err)
 		} else {
-			log.Printf("Report %d online users", len(*onlineDevice))
+			log.Printf("[%s: %d] Report %d online users", c.nodeInfo.NodeType, c.nodeInfo.NodeID, len(*onlineDevice))
 		}
 	}
 	// Report Illegal user
@@ -430,9 +429,13 @@ func (c *Controller) userInfoMonitor() (err error) {
 		if err = c.apiClient.ReportIllegal(detectResult); err != nil {
 			log.Print(err)
 		} else {
-			log.Printf("Report %d illegal behaviors", len(*detectResult))
+			log.Printf("[%s: %d] Report %d illegal behaviors", c.nodeInfo.NodeType, c.nodeInfo.NodeID, len(*detectResult))
 		}
 
 	}
 	return nil
+}
+
+func (c *Controller) buildNodeTag() string {
+	return fmt.Sprintf("%s_%s_%d", c.nodeInfo.NodeType, c.config.ListenIP, c.nodeInfo.Port)
 }

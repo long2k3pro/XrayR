@@ -178,7 +178,10 @@ func (c *APIClient) GetNodeInfo() (nodeInfo *api.NodeInfo, err error) {
 			log.Printf("custom_config is empty! take config from address now.")
 			disableCustomConfig = true
 		}
+	} else {
+		disableCustomConfig = true
 	}
+
 	if !disableCustomConfig {
 		nodeInfo, err = c.ParseSSPanelNodeInfo(nodeInfoResponse)
 		if err != nil {

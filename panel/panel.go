@@ -81,6 +81,25 @@ func (p *Panel) loadCore(panelConfig *Config) *core.Instance {
 	if err != nil {
 		log.Panicf("Failed to understand dns.json, Please check: https://xtls.github.io/config/base/routing/ for help: %s", err)
 	}
+	// Custom Inbound config
+	coreCustomInboundConfig := []conf.InboundDetourConfig{}
+	if panelConfig.InboundConfigPath != "" {
+		if data, err := io.ReadFile(panelConfig.InboundConfigPath); err != nil {
+			log.Panicf("Failed to read file at: %s", panelConfig.OutboundConfigPath)
+		} else {
+			if err = json.Unmarshal(data, &coreCustomInboundConfig); err != nil {
+				log.Panicf("Failed to unmarshal: %s", panelConfig.OutboundConfigPath)
+			}
+		}
+	}
+	inBoundConfig := []*core.InboundHandlerConfig{}
+	for _, config := range coreCustomInboundConfig {
+		oc, err := config.Build()
+		if err != nil {
+			log.Panicf("Failed to understand dns.json, Please check: https://xtls.github.io/config/base/outbounds/ for help: %s", err)
+		}
+		inBoundConfig = append(inBoundConfig, oc)
+	}
 	// Custom Outbound config
 	coreCustomOutboundConfig := []conf.OutboundDetourConfig{}
 	if panelConfig.OutboundConfigPath != "" {
@@ -117,6 +136,7 @@ func (p *Panel) loadCore(panelConfig *Config) *core.Instance {
 			serial.ToTypedMessage(dnsConfig),
 			serial.ToTypedMessage(routeConfig),
 		},
+		Inbound:  inBoundConfig,
 		Outbound: outBoundConfig,
 	}
 	server, err := core.New(config)
@@ -155,7 +175,7 @@ func (p *Panel) Start() {
 			log.Panicf("Unsupport panel type: %s", nodeConfig.PanelType)
 		}
 		var controllerService service.Service
-		// Regist controller service
+		// Register controller service
 		controllerConfig := getDefaultControllerConfig()
 		if nodeConfig.ControllerConfig != nil {
 			if err := mergo.Merge(controllerConfig, nodeConfig.ControllerConfig, mergo.WithOverride); err != nil {
