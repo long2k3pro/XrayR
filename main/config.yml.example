@@ -8,7 +8,7 @@ InboundConfigPath: # /etc/XrayR/custom_inbound.json # Path to custom inbound con
 OutboundConfigPath:  /etc/XrayR/custom_outbound.json # Path to custom outbound config, check https://xtls.github.io/config/outbound.html for help
 ConnetionConfig:
   Handshake: 4 # Handshake time limit, Second
-  ConnIdle: 30 # Connection idle time limit, Second
+  ConnIdle: 15 # Connection idle time limit, Second
   UplinkOnly: 0 # Time limit when the connection downstream is closed, Second
   DownlinkOnly: 0 # Time limit when the connection is closed after the uplink is closed, Second
   BufferSize: 64 # The internal cache size of each connection, kB 
@@ -54,7 +54,7 @@ Nodes:
         DNSEnv: # DNS ENV option used by DNS provider
           CLOUDFLARE_API_KEY: 
           CLOUDFLARE_DNS_API_TOKEN:
-  # -
+  #-
   #   PanelType: "SSpanel" # Panel type: SSpanel, V2board, PMpanel, Proxypanel
   #   ApiConfig:
   #     ApiHost: "http://127.0.0.1:667"
