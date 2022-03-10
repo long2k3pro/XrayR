@@ -14,13 +14,6 @@
             "protocol": [
                 "bittorrent"
             ]
-        },
-        {
-            "type": "field",
-            "outboundTag": "IPv6_out",
-            "domain": [
-                "geosite:netflix"
-            ]
         }
     ]
 }

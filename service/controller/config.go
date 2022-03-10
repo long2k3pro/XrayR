@@ -29,6 +29,7 @@ type CertConfig struct {
 
 type FallBackConfig struct {
 	SNI              string `mapstructure:"SNI"`
+	Alpn             string `mapstructure:"Alpn"`
 	Path             string `mapstructure:"Path"`
 	Dest             string `mapstructure:"Dest"`
 	ProxyProtocolVer uint64 `mapstructure:"ProxyProtocolVer"`

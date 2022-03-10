@@ -1,5 +1,5 @@
 Log:
-  Level: warning # Log level: none, error, warning, info, debug 
+  Level: none # Log level: none, error, warning, info, debug 
   AccessPath: # /etc/XrayR/access.Log
   ErrorPath: # /etc/XrayR/error.log
 DnsConfigPath:  /etc/XrayR/dns.json # Path to dns config, check https://xtls.github.io/config/dns.html for help
@@ -8,10 +8,10 @@ InboundConfigPath: # /etc/XrayR/custom_inbound.json # Path to custom inbound con
 OutboundConfigPath:  /etc/XrayR/custom_outbound.json # Path to custom outbound config, check https://xtls.github.io/config/outbound.html for help
 ConnetionConfig:
   Handshake: 4 # Handshake time limit, Second
-  ConnIdle: 15 # Connection idle time limit, Second
+  ConnIdle: 20 # Connection idle time limit, Second
   UplinkOnly: 0 # Time limit when the connection downstream is closed, Second
-  DownlinkOnly: 0 # Time limit when the connection is closed after the uplink is closed, Second
-  BufferSize: 64 # The internal cache size of each connection, kB 
+  DownlinkOnly: 2 # Time limit when the connection is closed after the uplink is closed, Second
+  BufferSize: 96 # The internal cache size of each connection, kB 
 Nodes:
   -
     PanelType: "SSpanel" # Panel type: SSpanel, V2board, PMpanel, Proxypanel
@@ -37,6 +37,7 @@ Nodes:
       DisableIVCheck: false # Disable the anti-reply protection for Shadowsocks 
       DisableSniffing: true
       EnableProxyProtocol: false # Only works for WebSocket and TCP
+      Alpn: # Alpn, Empty for any
       EnableFallback: false # Only support for Trojan and Vless
       FallBackConfigs:  # Support multiple fallbacks
         -
@@ -78,6 +79,7 @@ Nodes:
   #     DisableIVCheck: false # Disable the anti-reply protection for Shadowsocks 
   #     DisableSniffing: true
   #     EnableProxyProtocol: false # Only works for WebSocket and TCP
+  #     Alpn: # Alpn, Empty for any
   #     EnableFallback: false # Only support for Trojan and Vless
   #     FallBackConfigs:  # Support multiple fallbacks
   #       -
