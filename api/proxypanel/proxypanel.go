@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"reflect"
+	"regexp"
 	"strconv"
 	"time"
 
@@ -83,7 +84,7 @@ func readLocalRuleList(path string) (LocalRuleList []api.DetectRule) {
 		for fileScanner.Scan() {
 			LocalRuleList = append(LocalRuleList, api.DetectRule{
 				ID:      -1,
-				Pattern: fileScanner.Text(),
+				Pattern: regexp.MustCompile(fileScanner.Text()),
 			})
 		}
 		// handle first encountered error while reading
@@ -364,7 +365,7 @@ func (c *APIClient) GetNodeRule() (*[]api.DetectRule, error) {
 			if r.Type == "reg" {
 				ruleList = append(ruleList, api.DetectRule{
 					ID:      r.ID,
-					Pattern: r.Pattern,
+					Pattern: regexp.MustCompile(r.Pattern),
 				})
 			}
 
