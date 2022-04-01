@@ -38,8 +38,6 @@ type NodeInfo struct {
 	TransportProtocol string
 	FakeType          string
 	Host              string
-	CertFile          string
-	KeyFile           string
 	Path              string
 	EnableTLS         bool
 	TLSType           string
