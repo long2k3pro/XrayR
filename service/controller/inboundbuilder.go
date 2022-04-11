@@ -133,7 +133,6 @@ func InboundBuilder(config *Config, nodeInfo *api.NodeInfo, tag string) (*core.I
 		tcpSetting := &conf.TCPConfig{
 			AcceptProxyProtocol: config.EnableProxyProtocol,
 			HeaderConfig:        nodeInfo.Header,
-			Path:				 nodeInfo.Path,
 		}
 		streamSetting.TCPSettings = tcpSetting
 	} else if networkType == "websocket" {
