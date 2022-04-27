@@ -516,6 +516,7 @@ func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (
 		NodeID:            c.NodeID,
 		Port:              trojanNodeInfo.TrojanPort,
 		SpeedLimit:        speedlimit,
+		DeviceLimit:       trojanNodeInfo.ClientLimit,
 		TransportProtocol: "tcp",
 		EnableTLS:         true,
 		TLSType:           TLSType,
