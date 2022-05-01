@@ -82,7 +82,3 @@ bash <(curl -Ls https://raw.githubusercontent.com/long2k3pro/XrayR-release/maste
 [XrayR通知](https://t.me/XrayR_channel)
 
 
-## Stargazers over time
-
-[![Stargazers over time](https://starchart.cc/XrayR-project/XrayR.svg)](https://starchart.cc/XrayR-project/XrayR)
-
