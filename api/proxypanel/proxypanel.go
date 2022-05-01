@@ -528,7 +528,7 @@ func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (
 // ParseV2rayUserListResponse parse the response for the given userinfo format
 func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage) (*[]api.UserInfo, error) {
 	var speedlimit uint64 = 0
-
+	var devicelimit int = 0
 	vmessUserList := new([]*VMessUser)
 	if err := json.Unmarshal(*userInfoResponse, vmessUserList); err != nil {
 		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(*userInfoResponse), err)
@@ -541,11 +541,16 @@ func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage
 		} else {
 			speedlimit = uint64((user.SpeedLimit * 1000000) / 8)
 		}
+		if c.DeviceLimit > 0 {
+			devicelimit = int((c.DeviceLimit))
+		} else {
+			devicelimit = int((user.DeviceLimit))
+		}
 		userList[i] = api.UserInfo{
 			UID:         user.UID,
 			Email:       "",
 			UUID:        user.VmessUID,
-			DeviceLimit: c.DeviceLimit,
+			DeviceLimit: devicelimit,
 			SpeedLimit:  speedlimit,
 		}
 	}
