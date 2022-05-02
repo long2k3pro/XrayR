@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/long2k3pro/XrayR/api"
-	"github.com/long2k3pro/XrayR/common/legocmd"
+	"github.com/XrayR-project/XrayR/api"
+	"github.com/XrayR-project/XrayR/common/legocmd"
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/core"
@@ -133,7 +133,6 @@ func InboundBuilder(config *Config, nodeInfo *api.NodeInfo, tag string) (*core.I
 		tcpSetting := &conf.TCPConfig{
 			AcceptProxyProtocol: config.EnableProxyProtocol,
 			HeaderConfig:        nodeInfo.Header,
-			Path:				 nodeInfo.Path,
 		}
 		streamSetting.TCPSettings = tcpSetting
 	} else if networkType == "websocket" {

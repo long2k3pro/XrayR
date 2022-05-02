@@ -1,6 +1,22 @@
 name: Build and Release
 
 on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+    paths:
+      - "**/*.go"
+      - "go.mod"
+      - "go.sum"
+      - ".github/workflows/*.yml"
+  pull_request:
+    types: [opened, synchronize, reopened]
+    paths:
+      - "**/*.go"
+      - "go.mod"
+      - "go.sum"
+      - ".github/workflows/*.yml"
   release:
     types: [published]
 
@@ -97,15 +113,12 @@ jobs:
       - name: Set up Go
         uses: actions/setup-go@v2
         with:
-          go-version: ^1.18
+          go-version: ^1.17.2
 
       - name: Get project dependencies
-        run: | 
-          go install google.golang.org/protobuf/cmd/protoc-gen-go@febffdd
-          go mod download
+        run: go mod download
 
-      - name: Get updates
-        run: go mod tidy
+
       - name: Build XrayR
         run: |
           mkdir -p build_assets

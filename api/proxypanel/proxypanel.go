@@ -11,7 +11,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/long2k3pro/XrayR/api"
+	"github.com/XrayR-project/XrayR/api"
 	"github.com/go-resty/resty/v2"
 )
 
@@ -447,7 +447,6 @@ func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*
 		TransportProtocol: v2rayNodeInfo.V2Net,
 		FakeType:          v2rayNodeInfo.V2Type,
 		EnableTLS:         v2rayNodeInfo.V2TLS,
-		Header:            v2rayNodeInfo.V2Type,
 		TLSType:           TLStype,
 		Path:              v2rayNodeInfo.V2Path,
 		Host:              v2rayNodeInfo.V2Host,
@@ -517,7 +516,6 @@ func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (
 		NodeID:            c.NodeID,
 		Port:              trojanNodeInfo.TrojanPort,
 		SpeedLimit:        speedlimit,
-		DeviceLimit:       trojanNodeInfo.ClientLimit,
 		TransportProtocol: "tcp",
 		EnableTLS:         true,
 		TLSType:           TLSType,
@@ -529,7 +527,7 @@ func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (
 // ParseV2rayUserListResponse parse the response for the given userinfo format
 func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage) (*[]api.UserInfo, error) {
 	var speedlimit uint64 = 0
-	var devicelimit int = 0
+
 	vmessUserList := new([]*VMessUser)
 	if err := json.Unmarshal(*userInfoResponse, vmessUserList); err != nil {
 		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(*userInfoResponse), err)
@@ -542,16 +540,11 @@ func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage
 		} else {
 			speedlimit = uint64((user.SpeedLimit * 1000000) / 8)
 		}
-		if c.DeviceLimit > 0 {
-			devicelimit = int((c.DeviceLimit))
-		} else {
-			devicelimit = int((user.DeviceLimit))
-		}
 		userList[i] = api.UserInfo{
 			UID:         user.UID,
 			Email:       "",
 			UUID:        user.VmessUID,
-			DeviceLimit: devicelimit,
+			DeviceLimit: c.DeviceLimit,
 			SpeedLimit:  speedlimit,
 		}
 	}
