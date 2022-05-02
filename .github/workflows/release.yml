@@ -118,7 +118,8 @@ jobs:
       - name: Get project dependencies
         run: go mod download
 
-
+      - name: Get updates
+        run: go mod tidy
       - name: Build XrayR
         run: |
           mkdir -p build_assets
