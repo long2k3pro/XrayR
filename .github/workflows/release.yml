@@ -100,7 +100,9 @@ jobs:
           go-version: ^1.18
 
       - name: Get project dependencies
-        run: go mod download
+        run: | 
+          go install google.golang.org/protobuf/cmd/protoc-gen-go@febffdd
+          go mod download
 
       - name: Get updates
         run: go mod tidy

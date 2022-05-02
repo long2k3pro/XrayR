@@ -22,7 +22,7 @@ require (
 	github.com/xtls/xray-core v1.5.5
 	golang.org/x/net v0.0.0-20220421235706-1d1ef9303861
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.28.0
+	google.golang.org/protobuf v1.26.1-0.20210525005349-febffdd88e85
 )
 
 require (
