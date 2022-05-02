@@ -6,9 +6,9 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/XrayR-project/XrayR/api"
-	"github.com/XrayR-project/XrayR/common/legocmd"
-	"github.com/XrayR-project/XrayR/common/serverstatus"
+	"github.com/long2k3pro/XrayR/api"
+	"github.com/long2k3pro/XrayR/common/legocmd"
+	"github.com/long2k3pro/XrayR/common/serverstatus"
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/task"
 	"github.com/xtls/xray-core/core"
