@@ -10,7 +10,6 @@ require (
 	github.com/go-acme/lego/v4 v4.6.0
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-resty/resty/v2 v2.7.0
-	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/imdario/mergo v0.3.12
 	github.com/juju/ratelimit v1.0.1
 	github.com/r3labs/diff/v2 v2.15.1
