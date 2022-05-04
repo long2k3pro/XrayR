@@ -441,8 +441,6 @@ func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*
 		NodeType:          c.NodeType,
 		NodeID:            c.NodeID,
 		Port:              v2rayNodeInfo.V2Port,
-		//SpeedLimit:        speedlimit,
-		//DeviceLimit:       v2rayNodeInfo.ClientLimit,
 		AlterID:           v2rayNodeInfo.V2AlterID,
 		TransportProtocol: v2rayNodeInfo.V2Net,
 		FakeType:          v2rayNodeInfo.V2Type,
