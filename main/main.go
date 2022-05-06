@@ -90,6 +90,8 @@ func main() {
 			lastTime = time.Now()
 		}
 	})
+	var Uptimesys = int(time.Since(upTimeSystem).Seconds())
+	fmt.Printf("XrayR has running for %d \n", Uptimesys)
 	p.Start()
 	defer p.Close()
 

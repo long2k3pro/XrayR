@@ -34,9 +34,8 @@ func GetSystemInfo() (Cpu float64, Mem float64, Disk float64, Uptime int, err er
 
 	diskUsage, err := disk.Usage("/")
 	if err != nil {
-		return 0, 0, 0, 0, fmt.Errorf("et disk usage failed: %s", err)
+		return 0, 0, 0, 0, fmt.Errorf("get disk usage failed: %s", err)
 	}
-	time.Sleep(time.Second * 5)
 	Uptime = int(time.Since(upTime).Seconds())
 	return Cpu, memUsage.UsedPercent, diskUsage.UsedPercent, Uptime, nil
 }
