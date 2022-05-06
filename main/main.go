@@ -27,7 +27,6 @@ var (
 	codename = "XrayR"
 	intro    = "A Xray backend that supports many panels"
 )
-var upTimeSystem = time.Now()
 
 func showVersion() {
 	fmt.Printf("%s %s (%s) \n", codename, version, intro)
@@ -90,8 +89,6 @@ func main() {
 			lastTime = time.Now()
 		}
 	})
-	var Uptimesys = int(time.Since(upTimeSystem).Seconds())
-	fmt.Printf("XrayR has running for %d \n", Uptimesys)
 	p.Start()
 	defer p.Close()
 
