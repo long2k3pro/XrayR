@@ -10,10 +10,11 @@ import (
 	"github.com/shirou/gopsutil/mem"
 )
 
+var upTime = time.Now()
+
 // GetSystemInfo get the system info of a given periodic
 func GetSystemInfo() (Cpu float64, Mem float64, Disk float64, Uptime int, err error) {
 
-	upTime := time.Now()
 	cpuPercent, err := cpu.Percent(0, false)
 	// Check if cpuPercent is empty
 	if len(cpuPercent) > 0 {

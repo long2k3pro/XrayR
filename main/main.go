@@ -12,8 +12,8 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/long2k3pro/XrayR/panel"
 	"github.com/fsnotify/fsnotify"
+	"github.com/long2k3pro/XrayR/panel"
 	"github.com/spf13/viper"
 )
 
@@ -27,6 +27,7 @@ var (
 	codename = "XrayR"
 	intro    = "A Xray backend that supports many panels"
 )
+var upTimeSystem = time.Now()
 
 func showVersion() {
 	fmt.Printf("%s %s (%s) \n", codename, version, intro)
