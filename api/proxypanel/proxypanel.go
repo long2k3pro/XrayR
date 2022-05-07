@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-resty/resty/v2"
 	"github.com/long2k3pro/XrayR/api"
+	"github.com/go-resty/resty/v2"
 )
 
 // APIClient create a api client to the panel.
@@ -412,7 +412,7 @@ func (c *APIClient) ReportIllegal(detectResultList *[]api.DetectResult) error {
 // ParseV2rayNodeResponse parse the response for the given nodeinfor format
 func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*api.NodeInfo, error) {
 	var TLStype string
-	//var speedlimit uint64 = 0
+	var speedlimit uint64 = 0
 	if c.EnableXTLS {
 		TLStype = "xtls"
 	} else {
@@ -424,25 +424,25 @@ func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*
 		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(*nodeInfoResponse), err)
 	}
 
-	// if c.SpeedLimit > 0 {
-	// 	speedlimit = uint64((c.SpeedLimit * 1000000) / 8)
-	// } else {
-	// 	speedlimit = uint64((v2rayNodeInfo.SpeedLimit * 1000000) / 8)
-	// }
-	// if c.SpeedLimit == 0 && v2rayNodeInfo.SpeedLimit > 0 {
-	// 	speedlimit = v2rayNodeInfo.SpeedLimit
-	// }
+	if c.SpeedLimit > 0 {
+		speedlimit = uint64((c.SpeedLimit * 1000000) / 8)
+	} else {
+		speedlimit = uint64((v2rayNodeInfo.SpeedLimit * 1000000) / 8)
+	}
+	if c.SpeedLimit == 0 && v2rayNodeInfo.SpeedLimit > 0 {
+		speedlimit = v2rayNodeInfo.SpeedLimit
+	}
 	if c.DeviceLimit == 0 && v2rayNodeInfo.ClientLimit > 0 {
 		c.DeviceLimit = v2rayNodeInfo.ClientLimit
 	}
 
 	// Create GeneralNodeInfo
 	nodeinfo := &api.NodeInfo{
-		NodeType: c.NodeType,
-		NodeID:   c.NodeID,
-		Port:     v2rayNodeInfo.V2Port,
-		// SpeedLimit:        speedlimit,
-		// DeviceLimit:       v2rayNodeInfo.ClientLimit,
+		NodeType:          c.NodeType,
+		NodeID:            c.NodeID,
+		Port:              v2rayNodeInfo.V2Port,
+		SpeedLimit:        speedlimit,
+		DeviceLimit:       v2rayNodeInfo.ClientLimit,
 		AlterID:           v2rayNodeInfo.V2AlterID,
 		TransportProtocol: v2rayNodeInfo.V2Net,
 		FakeType:          v2rayNodeInfo.V2Type,
@@ -489,7 +489,7 @@ func (c *APIClient) ParseSSNodeResponse(nodeInfoResponse *json.RawMessage) (*api
 func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (*api.NodeInfo, error) {
 
 	var TLSType string
-	//var speedlimit uint64 = 0
+	var speedlimit uint64 = 0
 	if c.EnableXTLS {
 		TLSType = "xtls"
 	} else {
@@ -500,11 +500,11 @@ func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (
 	if err := json.Unmarshal(*nodeInfoResponse, trojanNodeInfo); err != nil {
 		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(*nodeInfoResponse), err)
 	}
-	// if c.SpeedLimit > 0 {
-	// 	speedlimit = uint64((c.SpeedLimit * 1000000) / 8)
-	// } else {
-	// 	speedlimit = uint64((trojanNodeInfo.SpeedLimit * 1000000) / 8)
-	// }
+	if c.SpeedLimit > 0 {
+		speedlimit = uint64((c.SpeedLimit * 1000000) / 8)
+	} else {
+		speedlimit = uint64((trojanNodeInfo.SpeedLimit * 1000000) / 8)
+	}
 
 	if c.DeviceLimit == 0 && trojanNodeInfo.ClientLimit > 0 {
 		c.DeviceLimit = trojanNodeInfo.ClientLimit
@@ -512,10 +512,10 @@ func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (
 
 	// Create GeneralNodeInfo
 	nodeinfo := &api.NodeInfo{
-		NodeType: c.NodeType,
-		NodeID:   c.NodeID,
-		Port:     trojanNodeInfo.TrojanPort,
-		//SpeedLimit:        speedlimit,
+		NodeType:          c.NodeType,
+		NodeID:            c.NodeID,
+		Port:              trojanNodeInfo.TrojanPort,
+		SpeedLimit:        speedlimit,
 		TransportProtocol: "tcp",
 		EnableTLS:         true,
 		TLSType:           TLSType,
