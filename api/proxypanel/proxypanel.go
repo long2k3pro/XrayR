@@ -526,10 +526,8 @@ func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (
 
 // ParseV2rayUserListResponse parse the response for the given userinfo format
 func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage) (*[]api.UserInfo, error) {
-	var (
-		speedlimit  uint64 = 0
-		devicelimit int    = 0
-	)
+	var speedlimit uint64 = 0
+
 	vmessUserList := new([]*VMessUser)
 	if err := json.Unmarshal(*userInfoResponse, vmessUserList); err != nil {
 		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(*userInfoResponse), err)
@@ -542,16 +540,11 @@ func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage
 		} else {
 			speedlimit = uint64((user.SpeedLimit * 1000000) / 8)
 		}
-		if c.DeviceLimit > 0 {
-			devicelimit = int(c.DeviceLimit)
-		} else {
-			devicelimit = int(user.DeviceLimit)
-		}
 		userList[i] = api.UserInfo{
 			UID:         user.UID,
 			Email:       "",
 			UUID:        user.VmessUID,
-			DeviceLimit: devicelimit,
+			DeviceLimit: c.DeviceLimit,
 			SpeedLimit:  speedlimit,
 		}
 	}
@@ -561,10 +554,8 @@ func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage
 
 // ParseTrojanUserListResponse parse the response for the given userinfo format
 func (c *APIClient) ParseTrojanUserListResponse(userInfoResponse *json.RawMessage) (*[]api.UserInfo, error) {
-	var (
-		speedlimit  uint64 = 0
-		devicelimit int    = 0
-	)
+	var speedlimit uint64 = 0
+
 	trojanUserList := new([]*TrojanUser)
 	if err := json.Unmarshal(*userInfoResponse, trojanUserList); err != nil {
 		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(*userInfoResponse), err)
@@ -577,16 +568,11 @@ func (c *APIClient) ParseTrojanUserListResponse(userInfoResponse *json.RawMessag
 		} else {
 			speedlimit = uint64((user.SpeedLimit * 1000000) / 8)
 		}
-		if c.DeviceLimit > 0 {
-			devicelimit = int(c.DeviceLimit)
-		} else {
-			devicelimit = int(user.DeviceLimit)
-		}
 		userList[i] = api.UserInfo{
 			UID:         user.UID,
 			Email:       "",
 			UUID:        user.Password,
-			DeviceLimit: devicelimit,
+			DeviceLimit: c.DeviceLimit,
 			SpeedLimit:  speedlimit,
 		}
 	}
