@@ -446,7 +446,7 @@ func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*
 		AlterID:           v2rayNodeInfo.V2AlterID,
 		TransportProtocol: v2rayNodeInfo.V2Net,
 		FakeType:          v2rayNodeInfo.V2Type,
-		ServiceName:       v2rayNodeInfo.ServiceName,
+		ServiceName:       v2rayNodeInfo.V2Path,
 		EnableTLS:         v2rayNodeInfo.V2TLS,
 		TLSType:           TLStype,
 		Path:              v2rayNodeInfo.V2Path,
