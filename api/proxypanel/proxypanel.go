@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/long2k3pro/XrayR/api"
 	"github.com/go-resty/resty/v2"
+	"github.com/long2k3pro/XrayR/api"
 )
 
 // APIClient create a api client to the panel.
@@ -446,6 +446,7 @@ func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*
 		AlterID:           v2rayNodeInfo.V2AlterID,
 		TransportProtocol: v2rayNodeInfo.V2Net,
 		FakeType:          v2rayNodeInfo.V2Type,
+		ServiceName:       v2rayNodeInfo.ServiceName,
 		EnableTLS:         v2rayNodeInfo.V2TLS,
 		TLSType:           TLStype,
 		Path:              v2rayNodeInfo.V2Path,

@@ -26,6 +26,7 @@ type V2rayNodeInfo struct {
 	V2Type        string `json:"v2_type"`
 	V2Host        string `json:"v2_host"`
 	V2Path        string `json:"v2_path"`
+	ServiceName   string `json:"v2_path"`
 	V2TLS         bool   `json:"v2_tls"`
 	V2Cdn         bool   `json:"v2_cdn"`
 	V2TLSProvider string `json:"v2_tls_provider"`
