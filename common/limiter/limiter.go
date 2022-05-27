@@ -6,8 +6,8 @@ import (
 	"sync"
 	"time"
 
-	"github.com/long2k3pro/XrayR/api"
 	"github.com/juju/ratelimit"
+	"github.com/long2k3pro/XrayR/api"
 )
 
 type UserInfo struct {

@@ -10,8 +10,8 @@ require (
 	github.com/go-acme/lego/v4 v4.6.0
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-resty/resty/v2 v2.7.0
-	github.com/golang/protobuf v1.5.2
-	github.com/imdario/mergo v0.3.13
+	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/imdario/mergo v0.3.12
 	github.com/juju/ratelimit v1.0.1
 	github.com/r3labs/diff/v2 v2.15.1
 	github.com/shirou/gopsutil v3.21.11+incompatible
@@ -22,7 +22,7 @@ require (
 	github.com/xtls/xray-core v1.5.5
 	golang.org/x/net v0.0.0-20220425223048-2871e0cb64e4
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/protobuf v1.28.0
 )
 
 require (
@@ -162,7 +162,7 @@ require (
 	gopkg.in/square/go-jose.v2 v2.6.0 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
-	gopkg.in/yaml.v3 v3.0.0 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b // indirect
 )
 
 replace github.com/linode/linodego => github.com/linode/linodego v0.31.1

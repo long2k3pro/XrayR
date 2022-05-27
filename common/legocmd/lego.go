@@ -39,12 +39,12 @@ func New() (*LegoCMD, error) {
 	configPath := os.Getenv("XRAY_LOCATION_CONFIG")
 	if configPath != "" {
 		path = configPath
-	} else if cwd, err := os.Getwd(); err==nil{
+	} else if cwd, err := os.Getwd(); err == nil {
 		path = cwd
 	} else {
 		path = "."
 	}
-	
+
 	defaultPath = filepath.Join(path, "cert")
 
 	app.Flags = cmd.CreateFlags(defaultPath)

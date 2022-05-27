@@ -6,16 +6,17 @@ import (
 	"log"
 	"sync"
 
+	"github.com/long2k3pro/XrayR/app/mydispatcher"
+
+	"github.com/imdario/mergo"
 	"github.com/long2k3pro/XrayR/api"
 	"github.com/long2k3pro/XrayR/api/pmpanel"
 	"github.com/long2k3pro/XrayR/api/proxypanel"
 	"github.com/long2k3pro/XrayR/api/sspanel"
 	"github.com/long2k3pro/XrayR/api/v2board"
-	"github.com/long2k3pro/XrayR/app/mydispatcher"
 	_ "github.com/long2k3pro/XrayR/main/distro/all"
 	"github.com/long2k3pro/XrayR/service"
 	"github.com/long2k3pro/XrayR/service/controller"
-	"github.com/imdario/mergo"
 	"github.com/r3labs/diff/v2"
 	"github.com/xtls/xray-core/app/proxyman"
 	"github.com/xtls/xray-core/app/stats"
@@ -182,7 +183,7 @@ func (p *Panel) Start() {
 				log.Panicf("Read Controller Config Failed")
 			}
 		}
-		controllerService = controller.New(server, apiClient, controllerConfig)
+		controllerService = controller.New(server, apiClient, controllerConfig, nodeConfig.PanelType)
 		p.Service = append(p.Service, controllerService)
 
 	}

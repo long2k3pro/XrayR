@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/long2k3pro/XrayR/common/legocmd/log"
 	"github.com/go-acme/lego/v4/challenge"
 	"github.com/go-acme/lego/v4/challenge/dns01"
 	"github.com/go-acme/lego/v4/challenge/http01"
@@ -14,6 +13,7 @@ import (
 	"github.com/go-acme/lego/v4/providers/dns"
 	"github.com/go-acme/lego/v4/providers/http/memcached"
 	"github.com/go-acme/lego/v4/providers/http/webroot"
+	"github.com/long2k3pro/XrayR/common/legocmd/log"
 	"github.com/urfave/cli"
 )
 

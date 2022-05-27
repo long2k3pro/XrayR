@@ -8,8 +8,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/long2k3pro/XrayR/api"
 	mapset "github.com/deckarep/golang-set"
+	"github.com/long2k3pro/XrayR/api"
 )
 
 type RuleManager struct {
