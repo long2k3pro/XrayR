@@ -15,12 +15,12 @@ import (
 
 var AEADMethod = []shadowsocks.CipherType{shadowsocks.CipherType_AES_128_GCM, shadowsocks.CipherType_AES_256_GCM, shadowsocks.CipherType_CHACHA20_POLY1305}
 
-func (c *Controller) buildVmessUser(userInfo *[]api.UserInfo, serverAlterID int) (users []*protocol.User) {
+func (c *Controller) buildVmessUser(userInfo *[]api.UserInfo, serverAlterID uint16) (users []*protocol.User) {
 	users = make([]*protocol.User, len(*userInfo))
 	for i, user := range *userInfo {
 		vmessAccount := &conf.VMessAccount{
 			ID:       user.UUID,
-			AlterIds: uint16(serverAlterID),
+			AlterIds: serverAlterID,
 			Security: "auto",
 		}
 		users[i] = &protocol.User{
