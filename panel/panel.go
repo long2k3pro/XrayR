@@ -86,10 +86,10 @@ func (p *Panel) loadCore(panelConfig *Config) *core.Instance {
 	coreCustomInboundConfig := []conf.InboundDetourConfig{}
 	if panelConfig.InboundConfigPath != "" {
 		if data, err := io.ReadFile(panelConfig.InboundConfigPath); err != nil {
-			log.Panicf("Failed to read Custom Inbound config file at: %s", panelConfig.OutboundConfigPath)
+			log.Panicf("Failed to read Custom Inbound config file at: %s", panelConfig.InboundConfigPath)
 		} else {
 			if err = json.Unmarshal(data, &coreCustomInboundConfig); err != nil {
-				log.Panicf("Failed to unmarshal Custom Inbound config: %s", panelConfig.OutboundConfigPath)
+				log.Panicf("Failed to unmarshal Custom Inbound config: %s", panelConfig.InboundConfigPath)
 			}
 		}
 	}

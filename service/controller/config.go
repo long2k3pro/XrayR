@@ -13,6 +13,7 @@ type Config struct {
 	EnableFallback       bool              `mapstructure:"EnableFallback"`
 	DisableIVCheck       bool              `mapstructure:"DisableIVCheck"`
 	DisableSniffing      bool              `mapstructure:"DisableSniffing"`
+	DomainsExcluded      string            `mapstructure:"DomainsExcluded"`
 	FallBackConfigs      []*FallBackConfig `mapstructure:"FallBackConfigs"`
 }
 
