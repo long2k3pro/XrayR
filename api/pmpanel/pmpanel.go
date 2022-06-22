@@ -11,8 +11,8 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/go-resty/resty/v2"
 	"github.com/long2k3pro/XrayR/api"
+	"github.com/go-resty/resty/v2"
 )
 
 // APIClient create a api client to the panel.
@@ -307,7 +307,7 @@ func (c *APIClient) ReportUserTraffic(userTraffic *[]api.UserTraffic) error {
 }
 
 // GetNodeRule will pull the audit rule form pmpanel
-func (c *APIClient) GetNodeRule() (*[]api.DetectRule, error) {
+func (c *APIClient) GetNodeRule() (*[]api.DetectRule, *[]string, error) {
 	ruleList := c.LocalRuleList
 	path := "/api/rules"
 	var nodeType = ""
@@ -319,7 +319,7 @@ func (c *APIClient) GetNodeRule() (*[]api.DetectRule, error) {
 	case "Trojan":
 		nodeType = "trojan"
 	default:
-		return nil, fmt.Errorf("NodeType Error: %s", c.NodeType)
+		return nil, nil, fmt.Errorf("NodeType Error: %s", c.NodeType)
 	}
 	res, err := c.client.R().
 		SetQueryParams(map[string]string{
@@ -332,13 +332,13 @@ func (c *APIClient) GetNodeRule() (*[]api.DetectRule, error) {
 
 	response, err := c.parseResponse(res, path, err)
 	if err != nil {
-		return nil, err
+		return nil, nil, err
 	}
 
 	ruleListResponse := new([]RuleItem)
 
 	if err := json.Unmarshal(response.Data, ruleListResponse); err != nil {
-		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(ruleListResponse), err)
+		return nil, nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(ruleListResponse), err)
 	}
 
 	for _, r := range *ruleListResponse {
@@ -347,7 +347,7 @@ func (c *APIClient) GetNodeRule() (*[]api.DetectRule, error) {
 			Pattern: regexp.MustCompile(r.Content),
 		})
 	}
-	return &ruleList, nil
+	return &ruleList, nil, nil
 }
 
 // ReportIllegal reports the user illegal behaviors
