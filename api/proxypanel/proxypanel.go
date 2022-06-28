@@ -413,6 +413,7 @@ func (c *APIClient) ReportIllegal(detectResultList *[]api.DetectResult) error {
 func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*api.NodeInfo, error) {
 	var TLStype string
 	var speedlimit uint64 = 0
+	var header json.RawMessage
 	if c.EnableXTLS {
 		TLStype = "xtls"
 	} else {
@@ -435,7 +436,10 @@ func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*
 	if c.DeviceLimit == 0 && v2rayNodeInfo.ClientLimit > 0 {
 		c.DeviceLimit = v2rayNodeInfo.ClientLimit
 	}
-
+	if v2rayNodeInfo.V2Type == "http" {
+		in := `{"type":"http"}`
+		header = json.RawMessage(in)
+	}
 	// Create GeneralNodeInfo
 	nodeinfo := &api.NodeInfo{
 		NodeType:          c.NodeType,
@@ -447,6 +451,7 @@ func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*
 		TransportProtocol: v2rayNodeInfo.V2Net,
 		FakeType:          v2rayNodeInfo.V2Type,
 		ServiceName:       v2rayNodeInfo.V2Path,
+		Header:            header,
 		EnableTLS:         v2rayNodeInfo.V2TLS,
 		TLSType:           TLStype,
 		Path:              v2rayNodeInfo.V2Path,
