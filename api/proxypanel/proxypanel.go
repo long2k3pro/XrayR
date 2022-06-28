@@ -437,7 +437,7 @@ func (c *APIClient) ParseV2rayNodeResponse(nodeInfoResponse *json.RawMessage) (*
 		c.DeviceLimit = v2rayNodeInfo.ClientLimit
 	}
 	if v2rayNodeInfo.V2Type == "http" {
-		in := `{"type":"http","path":` + `"` + v2rayNodeInfo.V2Path + `"}`
+		in := `{"type":"http","request": {"path":"` + v2rayNodeInfo.V2Path + `"}}`
 		header = json.RawMessage(in)
 	}
 	// Create GeneralNodeInfo
