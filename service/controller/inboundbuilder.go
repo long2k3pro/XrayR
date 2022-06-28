@@ -35,7 +35,7 @@ func InboundBuilder(config *Config, nodeInfo *api.NodeInfo, tag string) (*core.I
 	// SniffingConfig
 	sniffingConfig := &conf.SniffingConfig{
 		Enabled:         true,
-		DestOverride:    &conf.StringList{"fakedns+others"},
+		DestOverride:    &conf.StringList{"http", "tls"},
 		DomainsExcluded: &conf.StringList{config.DomainsExcluded},
 		MetadataOnly:    false,
 		RouteOnly:       true,
