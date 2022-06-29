@@ -13,6 +13,7 @@ import (
 
 	"github.com/go-resty/resty/v2"
 	"github.com/long2k3pro/XrayR/api"
+	"github.com/xtls/xray-core/common/net"
 )
 
 // APIClient create a api client to the panel.
@@ -378,6 +379,7 @@ func (c *APIClient) GetNodeRule() (*[]api.DetectRule, *[]string, error) {
 // ReportIllegal reports the user illegal behaviors
 func (c *APIClient) ReportIllegal(detectResultList *[]api.DetectResult) error {
 	var path string
+	var destination net.Destination
 	switch c.NodeType {
 	case "V2ray":
 		path = fmt.Sprintf("/api/v2ray/v1/trigger/%d", c.NodeID)
@@ -394,7 +396,7 @@ func (c *APIClient) ReportIllegal(detectResultList *[]api.DetectResult) error {
 			SetBody(IllegalReport{
 				RuleID: r.RuleID,
 				UID:    r.UID,
-				Reason: "XrayR cannot save reason",
+				Reason: string(destination.String()),
 			}).
 			SetResult(&Response{}).
 			ForceContentType("application/json").
