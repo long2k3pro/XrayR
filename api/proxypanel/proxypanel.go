@@ -561,6 +561,7 @@ func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage
 // ParseTrojanUserListResponse parse the response for the given userinfo format
 func (c *APIClient) ParseTrojanUserListResponse(userInfoResponse *json.RawMessage) (*[]api.UserInfo, error) {
 	var speedlimit uint64 = 0
+	var devicelimit int = 0
 
 	trojanUserList := new([]*TrojanUser)
 	if err := json.Unmarshal(*userInfoResponse, trojanUserList); err != nil {
@@ -574,11 +575,16 @@ func (c *APIClient) ParseTrojanUserListResponse(userInfoResponse *json.RawMessag
 		} else {
 			speedlimit = uint64((user.SpeedLimit * 1000000) / 8)
 		}
+		if c.DeviceLimit > 0 {
+			devicelimit = c.DeviceLimit
+		} else {
+			devicelimit = user.DeviceLimit
+		}
 		userList[i] = api.UserInfo{
 			UID:         user.UID,
 			Email:       "",
 			UUID:        user.Password,
-			DeviceLimit: c.DeviceLimit,
+			DeviceLimit: devicelimit,
 			SpeedLimit:  speedlimit,
 		}
 	}
