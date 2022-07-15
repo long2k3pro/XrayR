@@ -50,15 +50,15 @@ func New(apiConfig *api.Config) *APIClient {
 	// Read local rule list
 	localRuleList := readLocalRuleList(apiConfig.RuleListPath)
 	apiClient := &APIClient{
-		client:        client,
-		NodeID:        apiConfig.NodeID,
-		Key:           apiConfig.Key,
-		APIHost:       apiConfig.APIHost,
-		NodeType:      apiConfig.NodeType,
-		EnableVless:   apiConfig.EnableVless,
-		EnableXTLS:    apiConfig.EnableXTLS,
-		SpeedLimit:    apiConfig.SpeedLimit,
-		DeviceLimit:   apiConfig.DeviceLimit,
+		client:      client,
+		NodeID:      apiConfig.NodeID,
+		Key:         apiConfig.Key,
+		APIHost:     apiConfig.APIHost,
+		NodeType:    apiConfig.NodeType,
+		EnableVless: apiConfig.EnableVless,
+		EnableXTLS:  apiConfig.EnableXTLS,
+		SpeedLimit:  apiConfig.SpeedLimit,
+		//DeviceLimit:   apiConfig.DeviceLimit,
 		LocalRuleList: localRuleList,
 	}
 	return apiClient
@@ -495,7 +495,7 @@ func (c *APIClient) ParseSSNodeResponse(nodeInfoResponse *json.RawMessage) (*api
 func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (*api.NodeInfo, error) {
 
 	var TLSType string
-	var speedlimit uint64 = 0
+	//var speedlimit uint64 = 0
 	if c.EnableXTLS {
 		TLSType = "xtls"
 	} else {
@@ -506,11 +506,11 @@ func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (
 	if err := json.Unmarshal(*nodeInfoResponse, trojanNodeInfo); err != nil {
 		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(*nodeInfoResponse), err)
 	}
-	if c.SpeedLimit > 0 {
-		speedlimit = uint64((c.SpeedLimit * 1000000) / 8)
-	} else {
-		speedlimit = uint64((trojanNodeInfo.SpeedLimit * 1000000) / 8)
-	}
+	// if c.SpeedLimit > 0 {
+	// 	speedlimit = uint64((c.SpeedLimit * 1000000) / 8)
+	// } else {
+	// 	speedlimit = uint64((trojanNodeInfo.SpeedLimit * 1000000) / 8)
+	// }
 
 	if c.DeviceLimit == 0 && trojanNodeInfo.ClientLimit > 0 {
 		c.DeviceLimit = trojanNodeInfo.ClientLimit
@@ -518,10 +518,10 @@ func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (
 
 	// Create GeneralNodeInfo
 	nodeinfo := &api.NodeInfo{
-		NodeType:          c.NodeType,
-		NodeID:            c.NodeID,
-		Port:              trojanNodeInfo.TrojanPort,
-		SpeedLimit:        speedlimit,
+		NodeType: c.NodeType,
+		NodeID:   c.NodeID,
+		Port:     trojanNodeInfo.TrojanPort,
+		//SpeedLimit:        speedlimit,
 		TransportProtocol: "tcp",
 		EnableTLS:         true,
 		TLSType:           TLSType,
@@ -573,7 +573,7 @@ func (c *APIClient) ParseTrojanUserListResponse(userInfoResponse *json.RawMessag
 		if c.SpeedLimit > 0 {
 			speedlimit = uint64((c.SpeedLimit * 1000000) / 8)
 		} else {
-			speedlimit = uint64((user.SpeedLimit * 1000000) / 8)
+			speedlimit = uint64(user.SpeedLimit)
 		}
 		if c.DeviceLimit > 0 {
 			devicelimit = c.DeviceLimit
