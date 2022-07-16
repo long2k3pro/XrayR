@@ -554,7 +554,7 @@ func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage
 		if c.SpeedLimit > 0 {
 			speedlimit = uint64((c.SpeedLimit * 1000000) / 8)
 		} else {
-			speedlimit = uint64((user.SpeedLimit * 1000000) / 8)
+			speedlimit = uint64(user.SpeedLimit)
 		}
 		userList[i] = api.UserInfo{
 			UID:         user.UID,
@@ -587,9 +587,11 @@ func (c *APIClient) ParseTrojanUserListResponse(userInfoResponse *json.RawMessag
 		}
 		if c.DeviceLimit > 0 {
 			devicelimit = c.DeviceLimit
-		} else {
-			devicelimit = user.DeviceLimit
 		}
+		// } else {
+		// 	devicelimit = user.DeviceLimit
+		// }
+
 		userList[i] = api.UserInfo{
 			UID:         user.UID,
 			Email:       "",
