@@ -3,6 +3,7 @@ package rule
 
 import (
 	"fmt"
+	"log"
 	"reflect"
 	"strconv"
 	"strings"
@@ -30,8 +31,8 @@ func (r *RuleManager) UpdateRule(tag string, newRuleList []api.DetectRule) error
 	if value, ok := r.InboundRule.LoadOrStore(tag, newRuleList); ok {
 		oldRuleList := value.([]api.DetectRule)
 		if !reflect.DeepEqual(oldRuleList, newRuleList) {
-			r.InboundRule.Delete(tag)
 			r.InboundRule.Store(tag, newRuleList)
+			log.Printf("Updated Rule")
 		}
 	}
 	return nil

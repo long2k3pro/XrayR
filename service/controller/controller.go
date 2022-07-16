@@ -186,7 +186,7 @@ func (c *Controller) nodeInfoMonitor() (err error) {
 		if ruleList, protocolRule, err := c.apiClient.GetNodeRule(); err != nil {
 			log.Printf("Get rule list filed: %s", err)
 		} else {
-			if len(*ruleList) > 0 {
+			if len(*ruleList) >= 0 {
 				if err := c.UpdateRule(c.Tag, *ruleList); err != nil {
 					log.Print(err)
 				}

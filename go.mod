@@ -10,7 +10,7 @@ require (
 	github.com/go-acme/lego/v4 v4.8.0
 	github.com/go-ole/go-ole v1.2.6 // indirect
 	github.com/go-resty/resty/v2 v2.7.0
-	github.com/golang/protobuf v1.5.2
+	github.com/golang/protobuf v1.5.2 // indirect
 	github.com/imdario/mergo v0.3.13
 	github.com/juju/ratelimit v1.0.2
 	github.com/r3labs/diff/v2 v2.15.1
@@ -22,7 +22,7 @@ require (
 	github.com/xtls/xray-core v1.5.8
 	golang.org/x/net v0.0.0-20220607020251-c690dde0001d
 	google.golang.org/appengine v1.6.7 // indirect
-	google.golang.org/protobuf v1.28.0 // indirect
+	google.golang.org/protobuf v1.28.0
 )
 
 require (
