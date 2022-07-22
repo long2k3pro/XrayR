@@ -67,14 +67,16 @@ type VMessUser struct {
 	UID         int    `json:"uid"`
 	VmessUID    string `json:"vmess_uid"`
 	SpeedLimit  uint64 `json:"speed_limit"`
-	DeviceLimit int    `json:"device_limt"`
+	DeviceLimit int    `json:"device_limit"`
+	OnlineCount int    `json:"online_count"`
 }
 
 type TrojanUser struct {
 	UID         int    `json:"uid"`
 	Password    string `json:"password"`
 	SpeedLimit  uint64 `json:"speed_limit"`
-	DeviceLimit int    `json:"device_limt"`
+	DeviceLimit int    `json:"device_limit"`
+	OnlineCount int    `json:"online_count"`
 }
 
 type SSUser struct {

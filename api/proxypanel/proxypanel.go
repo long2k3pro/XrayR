@@ -9,24 +9,28 @@ import (
 	"reflect"
 	"regexp"
 	"strconv"
+	"sync"
 	"time"
 
 	"github.com/go-resty/resty/v2"
+	"github.com/google/uuid"
 	"github.com/long2k3pro/XrayR/api"
 )
 
 // APIClient create a api client to the panel.
 type APIClient struct {
-	client        *resty.Client
-	APIHost       string
-	NodeID        int
-	Key           string
-	NodeType      string
-	EnableVless   bool
-	EnableXTLS    bool
-	SpeedLimit    float64
-	DeviceLimit   int
-	LocalRuleList []api.DetectRule
+	client           *resty.Client
+	APIHost          string
+	NodeID           int
+	Key              string
+	NodeType         string
+	EnableVless      bool
+	EnableXTLS       bool
+	SpeedLimit       float64
+	DeviceLimit      int
+	LocalRuleList    []api.DetectRule
+	LastReportOnline map[int]int
+	access           sync.Mutex
 }
 
 // New creat a api instance
@@ -50,16 +54,17 @@ func New(apiConfig *api.Config) *APIClient {
 	// Read local rule list
 	localRuleList := readLocalRuleList(apiConfig.RuleListPath)
 	apiClient := &APIClient{
-		client:        client,
-		NodeID:        apiConfig.NodeID,
-		Key:           apiConfig.Key,
-		APIHost:       apiConfig.APIHost,
-		NodeType:      apiConfig.NodeType,
-		EnableVless:   apiConfig.EnableVless,
-		EnableXTLS:    apiConfig.EnableXTLS,
-		SpeedLimit:    apiConfig.SpeedLimit,
-		DeviceLimit:   apiConfig.DeviceLimit,
-		LocalRuleList: localRuleList,
+		client:           client,
+		NodeID:           apiConfig.NodeID,
+		Key:              apiConfig.Key,
+		APIHost:          apiConfig.APIHost,
+		NodeType:         apiConfig.NodeType,
+		EnableVless:      apiConfig.EnableVless,
+		EnableXTLS:       apiConfig.EnableXTLS,
+		SpeedLimit:       apiConfig.SpeedLimit,
+		DeviceLimit:      apiConfig.DeviceLimit,
+		LocalRuleList:    localRuleList,
+		LastReportOnline: make(map[int]int),
 	}
 	return apiClient
 }
@@ -260,7 +265,8 @@ func (c *APIClient) ReportNodeStatus(nodeStatus *api.NodeStatus) (err error) {
 
 //ReportNodeOnlineUsers reports online user ip
 func (c *APIClient) ReportNodeOnlineUsers(onlineUserList *[]api.OnlineUser) error {
-
+	c.access.Lock()
+	defer c.access.Unlock()
 	var path string
 	switch c.NodeType {
 	case "V2ray":
@@ -272,12 +278,17 @@ func (c *APIClient) ReportNodeOnlineUsers(onlineUserList *[]api.OnlineUser) erro
 	default:
 		return fmt.Errorf("Unsupported Node type: %s", c.NodeType)
 	}
-
+	reportOnline := make(map[int]int)
 	data := make([]NodeOnline, len(*onlineUserList))
 	for i, user := range *onlineUserList {
 		data[i] = NodeOnline{UID: user.UID, IP: user.IP}
+		if _, ok := reportOnline[user.UID]; ok {
+			reportOnline[user.UID]++
+		} else {
+			reportOnline[user.UID] = 1
+		}
 	}
-
+	c.LastReportOnline = reportOnline
 	res, err := c.createCommonRequest().
 		SetBody(data).
 		SetResult(&Response{}).
@@ -543,6 +554,7 @@ func (c *APIClient) ParseTrojanNodeResponse(nodeInfoResponse *json.RawMessage) (
 // ParseV2rayUserListResponse parse the response for the given userinfo format
 func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage) (*[]api.UserInfo, error) {
 	var speedlimit uint64 = 0
+	var devicelimit, localDeviceLimit int = 0, 0
 
 	vmessUserList := new([]*VMessUser)
 	if err := json.Unmarshal(*userInfoResponse, vmessUserList); err != nil {
@@ -556,11 +568,30 @@ func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage
 		} else {
 			speedlimit = uint64(user.SpeedLimit)
 		}
+		if c.DeviceLimit > 0 {
+			devicelimit = c.DeviceLimit
+		} else {
+			devicelimit = user.DeviceLimit
+		}
+		if devicelimit > 0 && user.OnlineCount > 0 {
+			lastOnline := 0
+			if v, ok := c.LastReportOnline[user.UID]; ok {
+				lastOnline = v
+			}
+			if localDeviceLimit = devicelimit - user.OnlineCount + lastOnline; localDeviceLimit > 0 {
+				devicelimit = localDeviceLimit
+			} else if lastOnline > 0 {
+				devicelimit = lastOnline
+			} else {
+				user.VmessUID = uuid.NewString()
+			}
+		}
+
 		userList[i] = api.UserInfo{
 			UID:         user.UID,
 			Email:       "",
 			UUID:        user.VmessUID,
-			DeviceLimit: c.DeviceLimit,
+			DeviceLimit: devicelimit,
 			SpeedLimit:  speedlimit,
 		}
 	}
@@ -571,7 +602,7 @@ func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage
 // ParseTrojanUserListResponse parse the response for the given userinfo format
 func (c *APIClient) ParseTrojanUserListResponse(userInfoResponse *json.RawMessage) (*[]api.UserInfo, error) {
 	var speedlimit uint64 = 0
-	var devicelimit int = 0
+	var devicelimit, localDeviceLimit int = 0, 0
 
 	trojanUserList := new([]*TrojanUser)
 	if err := json.Unmarshal(*userInfoResponse, trojanUserList); err != nil {
@@ -587,11 +618,22 @@ func (c *APIClient) ParseTrojanUserListResponse(userInfoResponse *json.RawMessag
 		}
 		if c.DeviceLimit > 0 {
 			devicelimit = c.DeviceLimit
+		} else {
+			devicelimit = user.DeviceLimit
 		}
-		// } else {
-		// 	devicelimit = user.DeviceLimit
-		// }
-
+		if devicelimit > 0 && user.OnlineCount > 0 {
+			lastOnline := 0
+			if v, ok := c.LastReportOnline[user.UID]; ok {
+				lastOnline = v
+			}
+			if localDeviceLimit = devicelimit - user.OnlineCount + lastOnline; localDeviceLimit > 0 {
+				devicelimit = localDeviceLimit
+			} else if lastOnline > 0 {
+				devicelimit = lastOnline
+			} else {
+				user.Password = uuid.NewString()
+			}
+		}
 		userList[i] = api.UserInfo{
 			UID:         user.UID,
 			Email:       "",
