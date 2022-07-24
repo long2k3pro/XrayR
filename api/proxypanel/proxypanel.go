@@ -13,7 +13,6 @@ import (
 	"time"
 
 	"github.com/go-resty/resty/v2"
-	"github.com/google/uuid"
 	"github.com/long2k3pro/XrayR/api"
 )
 
@@ -561,8 +560,8 @@ func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage
 		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(*userInfoResponse), err)
 	}
 
-	userList := make([]api.UserInfo, len(*vmessUserList))
-	for i, user := range *vmessUserList {
+	userList := []api.UserInfo{}
+	for _, user := range *vmessUserList {
 		if c.SpeedLimit > 0 {
 			speedlimit = uint64((c.SpeedLimit * 1000000) / 8)
 		} else {
@@ -583,17 +582,18 @@ func (c *APIClient) ParseV2rayUserListResponse(userInfoResponse *json.RawMessage
 			} else if lastOnline > 0 {
 				devicelimit = lastOnline
 			} else {
-				user.VmessUID = uuid.NewString()
+				continue
 			}
+		} else if _, ok := c.LastReportOnline[user.UID]; user.OnlineCount == 0 && ok {
+			delete(c.LastReportOnline, user.UID)
 		}
-
-		userList[i] = api.UserInfo{
+		userList = append(userList, api.UserInfo{
 			UID:         user.UID,
 			Email:       "",
 			UUID:        user.VmessUID,
 			DeviceLimit: devicelimit,
 			SpeedLimit:  speedlimit,
-		}
+		})
 	}
 
 	return &userList, nil
@@ -609,8 +609,8 @@ func (c *APIClient) ParseTrojanUserListResponse(userInfoResponse *json.RawMessag
 		return nil, fmt.Errorf("Unmarshal %s failed: %s", reflect.TypeOf(*userInfoResponse), err)
 	}
 
-	userList := make([]api.UserInfo, len(*trojanUserList))
-	for i, user := range *trojanUserList {
+	userList := []api.UserInfo{}
+	for _, user := range *trojanUserList {
 		if c.SpeedLimit > 0 {
 			speedlimit = uint64((c.SpeedLimit * 1000000) / 8)
 		} else {
@@ -631,16 +631,18 @@ func (c *APIClient) ParseTrojanUserListResponse(userInfoResponse *json.RawMessag
 			} else if lastOnline > 0 {
 				devicelimit = lastOnline
 			} else {
-				user.Password = uuid.NewString()
+				continue
 			}
+		} else if _, ok := c.LastReportOnline[user.UID]; user.OnlineCount == 0 && ok {
+			delete(c.LastReportOnline, user.UID)
 		}
-		userList[i] = api.UserInfo{
+		userList = append(userList, api.UserInfo{
 			UID:         user.UID,
 			Email:       "",
 			UUID:        user.Password,
 			DeviceLimit: devicelimit,
 			SpeedLimit:  speedlimit,
-		}
+		})
 	}
 
 	return &userList, nil
