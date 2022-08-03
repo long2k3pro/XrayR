@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"github.com/long2k3pro/XrayR/api"
-	"github.com/long2k3pro/XrayR/common/legocmd"
+	"github.com/realldz/XrayR/api"
+	"github.com/realldz/XrayR/common/legocmd"
 	"github.com/xtls/xray-core/common/net"
 	"github.com/xtls/xray-core/common/uuid"
 	"github.com/xtls/xray-core/core"

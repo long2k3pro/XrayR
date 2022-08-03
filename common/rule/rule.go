@@ -10,7 +10,7 @@ import (
 	"sync"
 
 	mapset "github.com/deckarep/golang-set"
-	"github.com/long2k3pro/XrayR/api"
+	"github.com/realldz/XrayR/api"
 )
 
 type RuleManager struct {

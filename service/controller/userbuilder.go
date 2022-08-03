@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/long2k3pro/XrayR/api"
+	"github.com/realldz/XrayR/api"
 	"github.com/xtls/xray-core/common/protocol"
 	"github.com/xtls/xray-core/common/serial"
 	"github.com/xtls/xray-core/infra/conf"

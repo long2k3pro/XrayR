@@ -13,7 +13,7 @@ import (
 	"github.com/go-acme/lego/v4/providers/dns"
 	"github.com/go-acme/lego/v4/providers/http/memcached"
 	"github.com/go-acme/lego/v4/providers/http/webroot"
-	"github.com/long2k3pro/XrayR/common/legocmd/log"
+	"github.com/realldz/XrayR/common/legocmd/log"
 	"github.com/urfave/cli"
 )
 

@@ -13,7 +13,7 @@ import (
 	"time"
 
 	"github.com/go-resty/resty/v2"
-	"github.com/long2k3pro/XrayR/api"
+	"github.com/realldz/XrayR/api"
 )
 
 // APIClient create a api client to the panel.
